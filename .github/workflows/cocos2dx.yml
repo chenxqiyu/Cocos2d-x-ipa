@@ -25,6 +25,7 @@ jobs:
           #cd cocos2d-x-4.0
           cd axmol
           brew install powershell
+          brew install ldid
           powershell setup.ps1 || true
           #source ~/.bash_profile || true
           ls -la
@@ -70,13 +71,17 @@ jobs:
 
       #https://github.com/axmolengine/axmol/blob/dev/docs/DevSetup.md#creating-a-new-project
       #axmol new -p dev.axmol.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp
-      #axmol new -p dev.axmol.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua
+      #axmol new -p dev.chenx.hellolua -d lua-tests -l lua --portrait lua-tests
       #axmol build -p ios -a arm64 -c
 
       #https://developer.apple.com/documentation/xcode-release-notes/xcode-15_2-release-notes
       - name: Build lua-tests Xcode project
         run: |
-          cd cocos2d-x-4.0/tests/lua-tests/project/proj.ios_mac/ios/
+          #source ~/.bash_profile || true
+          axmol new -p dev.chenx.hellolua -d lua-tests -l lua --portrait lua-tests
+          cd lua-tests\lua-tests
+          axmol build -p ios -a arm64 -c
+
           xcodebuild \
             -project lua-tests.xcodeproj \
             -scheme lua-tests \
