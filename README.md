@@ -4,8 +4,11 @@
 #参考命令
 
 #source ~/.bash_profile || true
+
 axmol new -p dev.chenx.hellolua -d lua-tests -l lua --portrait lua-tests
+
 cd lua-tests/lua-tests/
+
 axmol build -p ios -a arm64 -c
 
 cd build_ios_arm64/
