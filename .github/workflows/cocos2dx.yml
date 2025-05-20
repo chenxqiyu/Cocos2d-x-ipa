@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-13
     #/Users/runner/work/Cocos2d-x-ipa/Cocos2d-x-ipa
     steps:
       - name: Download cocos2d-x-4.0.zip
