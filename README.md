@@ -3,7 +3,7 @@
 需手动编译
 #参考命令
 
-#source ~/.bash_profile || true
+source ~/.bash_profile
 
 axmol new -p dev.chenx.hellolua -d lua-tests -l lua --portrait lua-tests
 
