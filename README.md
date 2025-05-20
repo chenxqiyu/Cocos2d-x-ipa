@@ -1,8 +1,8 @@
 # Cocos2d-x-ipa
 
 需手动编译
-
 #参考命令
+
 #source ~/.bash_profile || true
 axmol new -p dev.chenx.hellolua -d lua-tests -l lua --portrait lua-tests
 cd lua-tests/lua-tests/
