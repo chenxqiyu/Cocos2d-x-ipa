@@ -18,11 +18,18 @@ jobs:
           curl -L https://digitalocean.cocos2d-x.org/Cocos2D-X/cocos2d-x-4.0.zip -o cocos2d-x-4.0.zip
           unzip cocos2d-x-4.0.zip
 
-      - name: Set up cocos2d-x
+      - name: Initialize submodules manually
         run: |
           cd cocos2d-x-4.0
-          python ./setup.py
-          echo "source $(pwd)/setup.sh" >> $GITHUB_ENV
+          git init
+          git submodule update --init --recursive || true  # 跳过失败子模块
+          ls -la
+
+      - name: Set environment variables manually
+        run: |
+          echo "COCOS_CONSOLE_ROOT=${{ github.workspace }}/cocos2d-x-4.0/tools/cocos2d-console/bin" >> $GITHUB_ENV
+          echo "COCOS_X_ROOT=${{ github.workspace }}/cocos2d-x-4.0" >> $GITHUB_ENV
+          echo "PATH=${{ github.workspace }}/cocos2d-x-4.0/tools/cocos2d-console/bin:$PATH" >> $GITHUB_ENV
 
       - name: Build lua-tests Xcode project
         run: |
