@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-
+    #/Users/runner/work/Cocos2d-x-ipa/Cocos2d-x-ipa
     steps:
       - name: Download cocos2d-x-4.0.zip
         run: |
@@ -29,6 +29,20 @@ jobs:
           echo "COCOS_X_ROOT=${{ github.workspace }}/cocos2d-x-4.0" >> $GITHUB_ENV
           echo "PATH=${{ github.workspace }}/cocos2d-x-4.0/tools/cocos2d-console/bin:$PATH" >> $GITHUB_ENV
 
+      - name: Install Python 2.7 via homebrew
+        run: |
+            brew install pyenv
+            pyenv install 2.7.18
+            pyenv global 2.7.18
+            echo "PYENV_ROOT=$HOME/.pyenv" >> $GITHUB_ENV
+            echo "$HOME/.pyenv/bin" >> $GITHUB_PATH
+            echo "$HOME/.pyenv/shims" >> $GITHUB_PATH
+
+      - name: Check Python version
+        run: |
+            which python
+            python --version
+
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
@@ -39,7 +53,7 @@ jobs:
 
       - name: Build lua-tests Xcode project
         run: |
-          cd cocos2d-x-4.0/tests/lua-tests/proj.ios_mac
+          cd cocos2d-x-4.0/tests/lua-tests/project/proj.ios_mac/ios/
           xcodebuild \
             -project lua-tests.xcodeproj \
             -scheme lua-tests \
