@@ -21,8 +21,6 @@ jobs:
       - name: Initialize submodules manually
         run: |
           cd cocos2d-x-4.0
-          git init
-          git submodule update --init --recursive || true  # 跳过失败子模块
           ls -la
 
       - name: Set environment variables manually
@@ -30,6 +28,14 @@ jobs:
           echo "COCOS_CONSOLE_ROOT=${{ github.workspace }}/cocos2d-x-4.0/tools/cocos2d-console/bin" >> $GITHUB_ENV
           echo "COCOS_X_ROOT=${{ github.workspace }}/cocos2d-x-4.0" >> $GITHUB_ENV
           echo "PATH=${{ github.workspace }}/cocos2d-x-4.0/tools/cocos2d-console/bin:$PATH" >> $GITHUB_ENV
+
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
 
       - name: Build lua-tests Xcode project
         run: |
@@ -74,12 +80,6 @@ jobs:
             -exportPath ${{ github.workspace }}/build/ipa \
             CODE_SIGNING_ALLOWED=NO
 
-      - name: SSH connection to Actions
-        uses: P3TERX/ssh2actions@v1.0.0
-        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-        env:
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
