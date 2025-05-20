@@ -1,1 +1,70 @@
+name: Build Cocos2d-x 4.0 lua-tests iOS IPA
 
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Download cocos2d-x-4.0.zip
+        run: |
+          curl -L https://digitalocean.cocos2d-x.org/Cocos2D-X/cocos2d-x-4.0.zip -o cocos2d-x-4.0.zip
+          unzip cocos2d-x-4.0.zip
+
+      - name: Set up cocos2d-x
+        run: |
+          cd cocos2d-x-4.0
+          git submodule update --init --recursive
+          python ./setup.py
+          echo "source $(pwd)/setup.sh" >> $GITHUB_ENV
+
+      - name: Build lua-tests Xcode project
+        run: |
+          cd cocos2d-x-4.0/tests/lua-tests/proj.ios_mac
+          xcodebuild \
+            -project lua-tests.xcodeproj \
+            -scheme lua-tests \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath ${{ github.workspace }}/build/lua-tests.xcarchive \
+            archive CODE_SIGNING_ALLOWED=NO
+
+      - name: Prepare exportOptions.plist
+        run: |
+          cat > exportOptions.plist <<EOL
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+           "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>ad-hoc</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>compileBitcode</key>
+            <false/>
+            <key>stripSwiftSymbols</key>
+            <true/>
+            <key>signingCertificate</key>
+            <string></string>
+            <key>provisioningProfiles</key>
+            <dict/>
+          </dict>
+          </plist>
+          EOL
+
+      - name: Export IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath ${{ github.workspace }}/build/lua-tests.xcarchive \
+            -exportOptionsPlist exportOptions.plist \
+            -exportPath ${{ github.workspace }}/build/ipa \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: lua-tests-ipa
+          path: build/ipa/*.ipa
