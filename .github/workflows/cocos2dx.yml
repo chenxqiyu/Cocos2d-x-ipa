@@ -21,7 +21,6 @@ jobs:
       - name: Set up cocos2d-x
         run: |
           cd cocos2d-x-4.0
-          git submodule update --init --recursive
           python ./setup.py
           echo "source $(pwd)/setup.sh" >> $GITHUB_ENV
 
