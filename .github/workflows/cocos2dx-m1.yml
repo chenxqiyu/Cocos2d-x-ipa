@@ -1,4 +1,4 @@
-name: Build Cocos2d-x 4.0 lua-tests iOS IPA
+name: M1 arm64 Build Cocos2d-x 4.0 lua-tests iOS IPA
 
 on:
   workflow_dispatch:
