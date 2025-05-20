@@ -10,14 +10,6 @@ axmol build -p ios -a arm64 -c
 
 cd build_ios_arm64/
 
-# xcodebuild \
-#   -project lua-tests.xcodeproj \
-#   -scheme lua-tests \
-#   -configuration Release \
-#   -sdk iphoneos \
-#   -archivePath ${{ github.workspace }}/build/lua-tests.xcarchive \
-#   archive CODE_SIGNING_ALLOWED=NO
-
 
  xcodebuild \
     -project lua-tests.xcodeproj \
