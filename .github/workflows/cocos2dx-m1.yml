@@ -12,6 +12,7 @@ jobs:
   build:
     runs-on: macos-latest
     #Darwin Mac-1747749718146.local 23.6.0 Darwin Kernel Version 23.6.0: Thu Mar  6 22:01:06 PST 2025; root:xnu-10063.141.1.704.6~1/RELEASE_ARM64_VMAPPLE arm64
+    #xcodebuild -version Xcode 15.4
     #/Users/runner/work/Cocos2d-x-ipa/Cocos2d-x-ipa
     steps:
       - name: Download
