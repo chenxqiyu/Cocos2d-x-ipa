@@ -13,14 +13,20 @@ jobs:
     runs-on: macos-13
     #/Users/runner/work/Cocos2d-x-ipa/Cocos2d-x-ipa
     steps:
-      - name: Download cocos2d-x-4.0.zip
+      - name: Download
         run: |
-          curl -L https://digitalocean.cocos2d-x.org/Cocos2D-X/cocos2d-x-4.0.zip -o cocos2d-x-4.0.zip
-          unzip cocos2d-x-4.0.zip
+          #curl -L https://digitalocean.cocos2d-x.org/Cocos2D-X/cocos2d-x-4.0.zip -o cocos2d-x-4.0.zip
+          #unzip cocos2d-x-4.0.zip
+          git clone https://github.com/axmolengine/axmol.git
+          
 
       - name: Initialize submodules manually
         run: |
-          cd cocos2d-x-4.0
+          #cd cocos2d-x-4.0
+          cd axmol
+          brew install powershell
+          powershell setup.ps1
+          source ~/.bash_profile
           ls -la
 
       - name: Check Python version0000
@@ -28,20 +34,20 @@ jobs:
             which python
             python --version
 
-      - name: Set environment variables manually
-        run: |
-          echo "COCOS_CONSOLE_ROOT=${{ github.workspace }}/cocos2d-x-4.0/tools/cocos2d-console/bin" >> $GITHUB_ENV
-          echo "COCOS_X_ROOT=${{ github.workspace }}/cocos2d-x-4.0" >> $GITHUB_ENV
-          echo "PATH=${{ github.workspace }}/cocos2d-x-4.0/tools/cocos2d-console/bin:$PATH" >> $GITHUB_ENV
+      # - name: Set environment variables manually
+      #   run: |
+      #     echo "COCOS_CONSOLE_ROOT=${{ github.workspace }}/cocos2d-x-4.0/tools/cocos2d-console/bin" >> $GITHUB_ENV
+      #     echo "COCOS_X_ROOT=${{ github.workspace }}/cocos2d-x-4.0" >> $GITHUB_ENV
+      #     echo "PATH=${{ github.workspace }}/cocos2d-x-4.0/tools/cocos2d-console/bin:$PATH" >> $GITHUB_ENV
 
-      - name: Install Python 2.7 via homebrew
-        run: |
-            brew install pyenv
-            pyenv install 2.7.18
-            pyenv global 2.7.18
-            echo "PYENV_ROOT=$HOME/.pyenv" >> $GITHUB_ENV
-            echo "$HOME/.pyenv/bin" >> $GITHUB_PATH
-            echo "$HOME/.pyenv/shims" >> $GITHUB_PATH
+      # - name: Install Python 2.7 via homebrew
+      #   run: |
+      #       brew install pyenv
+      #       pyenv install 2.7.18
+      #       pyenv global 2.7.18
+      #       echo "PYENV_ROOT=$HOME/.pyenv" >> $GITHUB_ENV
+      #       echo "$HOME/.pyenv/bin" >> $GITHUB_PATH
+      #       echo "$HOME/.pyenv/shims" >> $GITHUB_PATH
 
       - name: Check Python version
         run: |
@@ -55,7 +61,19 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
+      #cmake ../.. -GXcode· -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos
+      #Xcode 15.2
+      #xcodebuild -version
+      # grep -rn "IPHONEOS_DEPLOYMENT_TARGET" project.pbxproj
+      #sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 8.0;/IPHONEOS_DEPLOYMENT_TARGET = 12.0;/g' project.pbxproj
+      #curl -F "file=@HelloLua.ipa" https://temp.sh/upload
 
+      #https://github.com/axmolengine/axmol/blob/dev/docs/DevSetup.md#creating-a-new-project
+      #axmol new -p dev.axmol.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp
+      #axmol new -p dev.axmol.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua
+      #axmol build -p ios -a arm64 -c
+
+      #https://developer.apple.com/documentation/xcode-release-notes/xcode-15_2-release-notes
       - name: Build lua-tests Xcode project
         run: |
           cd cocos2d-x-4.0/tests/lua-tests/project/proj.ios_mac/ios/
@@ -67,37 +85,37 @@ jobs:
             -archivePath ${{ github.workspace }}/build/lua-tests.xcarchive \
             archive CODE_SIGNING_ALLOWED=NO
 
-      - name: Prepare exportOptions.plist
-        run: |
-          cat > exportOptions.plist <<EOL
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
-           "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>method</key>
-            <string>ad-hoc</string>
-            <key>signingStyle</key>
-            <string>manual</string>
-            <key>compileBitcode</key>
-            <false/>
-            <key>stripSwiftSymbols</key>
-            <true/>
-            <key>signingCertificate</key>
-            <string></string>
-            <key>provisioningProfiles</key>
-            <dict/>
-          </dict>
-          </plist>
-          EOL
+      # - name: Prepare exportOptions.plist
+      #   run: |
+      #     cat > exportOptions.plist <<EOL
+      #     <?xml version="1.0" encoding="UTF-8"?>
+      #     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+      #      "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      #     <plist version="1.0">
+      #     <dict>
+      #       <key>method</key>
+      #       <string>ad-hoc</string>
+      #       <key>signingStyle</key>
+      #       <string>manual</string>
+      #       <key>compileBitcode</key>
+      #       <false/>
+      #       <key>stripSwiftSymbols</key>
+      #       <true/>
+      #       <key>signingCertificate</key>
+      #       <string></string>
+      #       <key>provisioningProfiles</key>
+      #       <dict/>
+      #     </dict>
+      #     </plist>
+      #     EOL
 
-      - name: Export IPA
-        run: |
-          xcodebuild -exportArchive \
-            -archivePath ${{ github.workspace }}/build/lua-tests.xcarchive \
-            -exportOptionsPlist exportOptions.plist \
-            -exportPath ${{ github.workspace }}/build/ipa \
-            CODE_SIGNING_ALLOWED=NO
+      # - name: Export IPA
+      #   run: |
+      #     xcodebuild -exportArchive \
+      #       -archivePath ${{ github.workspace }}/build/lua-tests.xcarchive \    
+      #       -exportOptionsPlist exportOptions.plist \
+      #       -exportPath ${{ github.workspace }}/build/ipa \
+      #       CODE_SIGNING_ALLOWED=NO
 
 
       - name: Upload IPA artifact
