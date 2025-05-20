@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-13
+    runs-on: macos-latest
     #/Users/runner/work/Cocos2d-x-ipa/Cocos2d-x-ipa
     steps:
       - name: Download
