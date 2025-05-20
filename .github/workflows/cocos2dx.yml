@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       ssh:
-        description: 'SSH Á¬½ÓÖÁ Actions'
+        description: 'SSH è¿žæŽ¥è‡³ Actions'
         required: false
         default: 'false'
 
