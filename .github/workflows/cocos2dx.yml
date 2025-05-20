@@ -91,6 +91,17 @@ jobs:
             -archivePath ${{ github.workspace }}/build/lua-tests.xcarchive \
             archive CODE_SIGNING_ALLOWED=NO
 
+
+           xcodebuild \
+              -project lua-tests.xcodeproj \
+              -scheme lua-tests \
+              -configuration Debug \
+              -sdk iphoneos \
+              build \
+              CODE_SIGNING_ALLOWED=NO \
+              CODE_SIGNING_REQUIRED=NO
+
+
       # - name: Prepare exportOptions.plist
       #   run: |
       #     cat > exportOptions.plist <<EOL
