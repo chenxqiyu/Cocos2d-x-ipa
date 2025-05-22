@@ -27,3 +27,6 @@ cd build_ios_arm64/
     CODE_SIGNING_ALLOWED=NO \
     CODE_SIGNING_REQUIRED=NO
 ```
+```
+curl -F "file=@xxxx.ipa" https://temp.sh/upload
+```
