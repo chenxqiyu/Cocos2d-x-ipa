@@ -2,18 +2,22 @@
 
 需手动编译
 #参考命令
-
+```
 source ~/.bash_profile
-
+```
+```
 axmol new -p dev.chenx.hellolua -d lua-tests -l lua --portrait lua-tests
-
+```
+```
 cd lua-tests/lua-tests/
-
+```
+```
 axmol build -p ios -a arm64 -c
-
+```
+```
 cd build_ios_arm64/
-
-
+```
+```
  xcodebuild \
     -project lua-tests.xcodeproj \
     -scheme lua-tests \
@@ -22,3 +26,4 @@ cd build_ios_arm64/
     build \
     CODE_SIGNING_ALLOWED=NO \
     CODE_SIGNING_REQUIRED=NO
+```
